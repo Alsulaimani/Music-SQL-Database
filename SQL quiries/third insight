@@ -1,0 +1,18 @@
+WITH sub1 AS(
+	SELECT c.CustomerId, c.FirstName, c.LastName, c.Country, SUM( i.total ) AS total_spent
+	FROM Invoice i
+	JOIN Customer c
+	ON i.CustomerId = c.CustomerId
+	GROUP BY c.CustomerId
+),
+sub2 AS(
+SELECT CustomerId, FirstName, LastName, Country, MAX( total_spent ) AS MAXimumPurchases
+FROM sub1
+GROUP BY Country
+)
+
+SELECT sub1.*
+FROM sub1
+JOIN  sub2
+ON sub1.Country = sub2.Country
+WHERE sub1.total_spent = sub2.MAXimumPurchases

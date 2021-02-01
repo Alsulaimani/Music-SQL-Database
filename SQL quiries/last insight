@@ -1,0 +1,9 @@
+SELECT a.Name, count(t.TrackId) AS counter
+FROM Artist a
+JOIN Album Al
+ON a.ArtistId = al.ArtistId
+JOIN Track t
+ON al.AlbumId = t.AlbumId
+GROUP BY 1
+HAVING counter >= 30
+ORDER BY 2 desc

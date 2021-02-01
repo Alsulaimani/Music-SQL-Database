@@ -1,0 +1,26 @@
+WITH sub1 AS(
+
+SELECT c.Country AS cntry, g.Name AS Name, count(i.InvoiceId) AS Invoice_c
+FROM Genre g
+JOIN Track t
+ON g.GenreId = t.GenreId
+JOIN InvoiceLine il
+ON  t.TrackId = il.TrackId
+JOIN Invoice i
+ON il.InvoiceId = i.InvoiceId
+JOIN Customer c
+ON i.CustomerId = c.CustomerId
+GROUP BY 1,2
+ORDER BY 1, 2, 3 DESC),
+
+sub2 AS (
+SELECT cntry AS Country_name, Name, MAX(Invoice_c) AS Purchases
+FROM sub1
+GROUP BY 1
+)
+
+SELECT sub1.*
+FROM sub1
+JOIN sub2
+ON sub1.cntry = sub2.Country_name
+WHERE sub1.Invoice_c = sub2.Purchases

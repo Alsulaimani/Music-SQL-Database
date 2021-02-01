@@ -1,0 +1,11 @@
+WITH sub1 AS(
+SELECT Name, Milliseconds AS seconds
+From Track),
+
+sub2 AS(
+SELECT  AVG(seconds) AS average
+FROM sub1)
+
+SELECT Name, CASE WHEN seconds >= (SELECT average FROM sub2) THEN seconds ELSE 0 END AS Mseconds
+FROM sub1
+WHERE Mseconds>0
